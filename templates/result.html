@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+{% block content %}
+	<style>
+		.aqi-category {
+			font-size: 24px;
+			font-weight: bold;
+		}
+		.aqi-good { color: #00c853; }
+		.aqi-moderate { color: #ffd700; }
+		.aqi-sensitive { color: #ff9800; }
+		.aqi-unhealthy { color: #f44336; }
+		.aqi-very-unhealthy { color: #9c27b0; }
+		.aqi-hazardous { color: #880e4f; }
+		.aqi-description {
+			font-size: 16px;
+			margin-top: 0.5rem;
+		}
+	</style>
+	<h5>Air Quality Index (PM 2.5)</h5>
+	<ul class="list-group list-group-flush">
+		{% for item in prediction %}
+			<li style="font-size:22px;" class="list-group-item">
+				{% if item is number %}
+					<div>PM 2.5 Value: {{ "%.3f"|format(item) }} µg/m³</div>
+					<div class="mt-2">
+						{% set aqi_value = item %}
+						{% if aqi_value <= 12.0 %}
+							<strong class="aqi-category aqi-good">Good</strong>
+							<p class="aqi-description">Air quality is satisfactory, and air pollution poses little or no risk.</p>
+						{% elif aqi_value <= 35.4 %}
+							<strong class="aqi-category aqi-moderate">Moderate</strong>
+							<p class="aqi-description">Air quality is acceptable. However, there may be a risk for some people.</p>
+						{% elif aqi_value <= 55.4 %}
+							<strong class="aqi-category aqi-sensitive">Unhealthy for Sensitive Groups</strong>
+							<p class="aqi-description">Members of sensitive groups may experience health effects.</p>
+						{% elif aqi_value <= 150.4 %}
+							<strong class="aqi-category aqi-unhealthy">Unhealthy</strong>
+							<p class="aqi-description">Everyone may begin to experience health effects.</p>
+						{% elif aqi_value <= 250.4 %}
+							<strong class="aqi-category aqi-very-unhealthy">Very Unhealthy</strong>
+							<p class="aqi-description">Health alert: everyone may experience more serious health effects.</p>
+						{% else %}
+							<strong class="aqi-category aqi-hazardous">Hazardous</strong>
+							<p class="aqi-description">Health warnings of emergency conditions. The entire population is affected.</p>
+						{% endif %}
+					</div>
+				{% else %}
+					{{ item }}
+				{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
+
+	<!-- Debug information for troubleshooting -->
+	<div class="alert alert-secondary" style="margin-top:10px;">
+		<strong>Debug Information:</strong><br>
+		<small>
+			{% if debug_info %}
+				{% if debug_info.error %}
+					<strong>Error:</strong> {{ debug_info.error }}<br>
+				{% endif %}
+				<strong>Input Values:</strong> {{ debug_info.input_values }}<br>
+				<strong>Raw Form Data:</strong> {{ debug_info.raw_form_data }}<br>
+				<strong>Prediction:</strong> {{ debug_info.prediction }}
+			{% endif %}
+		</small>
+	</div>
+	</div>
+	<br>
+	<form action="{{ url_for('home') }}">
+		<input class="btn btn-info" type="submit" value="Make Another Prediction" >
+	</form>
+{% endblock content %}

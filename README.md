@@ -27,7 +27,7 @@ The model requires the following weather parameters:
 1. Clone the repository:
    ```bash
    git clone <repository-url>
-   cd Air-Quality-Index-prediction_with_deployment
+   cd Air-Quality-Index
    ```
 
 2. Create a virtual environment (recommended):

@@ -114,3 +114,4 @@ This project is open source. Please check the license file for more details.
 
 - Dataset source: Air Quality Index data
 - Model training algorithms implemented in Jupyter notebooks
+
